@@ -130,5 +130,80 @@ Lorsque la commande commmit est lancée, l'éditeur par défaut s'ouvre. Vous de
 les changements effectués.
 
 Une fois cela fait, git va officiellement sauvegarder les changements et les ajoutera à la liste des changements du
-projet.
+projet. Le commit est local : Il n'affectera le projet que sur votre ordinateur !
 
+### Annuler un commit
+
+Si une erreur s'est introduite nous pouvons annuler le commit qui l'a causée. Pour cela nous allons d'abord apprendre
+à vérifier les logs.
+
+#### Vérifier les logs
+Nous pouvons consulté l'historique des logs avec la commande suivante :
+
+```bash
+git log
+git log -p # pour avoir les modifications explicitées
+git log --stat # avoir un résumé plus court
+```
+
+Mon résultat :
+```
+commit babbf273a970f0b6fbd44836596ffe45fb99cbe2
+Author: plejeail <pierre.lejeail@hotmail.fr>
+Date:   Sun Feb 5 17:07:03 2017 +0100
+
+    Un autre commit est arrivé
+
+commit 8b747fc7a5bfeae1bbb81e9512521b790023953f
+Author: plejeail <pierre.lejeail@hotmail.fr>
+Date:   Sun Feb 5 16:35:18 2017 +0100
+
+    Vous avez effectué un commit
+```
+
+Chaque commit est décrit par un identifiant en héxadécimal, l'auteur du commit, la date, et le message décrivant les
+modifications.
+
+#### Correction d'une erreur
+Pour changer le message du dernier comit :
+
+```
+git commit --amend
+```
+
+Annuler les modifications d'un commit :
+
+```
+git reset $COMMIT
+```
+
+où ```$COMMIT``` peut prendre les valeurs :
+- ```HEAD ```: dernier commit
+- ```HEAD^ ```: avant-dernier
+- ```HEAD^^ ```: avant-avant-dernier
+- ```HEAD~2 ```: avant-avant-dernier (notation équivalente)
+- ```babbf273a970f0b6fbd44836596ffe45fb99cbe2 ```: l'identifiant d'un commit
+- ```babbf273 ```: vous n'êtes pas obliger d'écrire l'identifiant en entier, tant que git ne risque pas de le confondre
+
+
+Seul le commit est retiré, les fichiers eux sont toujours modifiés. Pour restaurer les fichiers, il faut rajouter
+l'option '--hard' à l'instruction ```git reset```.
+
+#### Restaurer les modifications au dernier commit
+Si vous avez modifié un fichier mais que vous ne l'avez pas encore commiter, vous pouvez le restaurer tel qu'il
+était au dernier commit en utilisant la commande :
+```bash
+git checkout file
+```
+
+## Echanger avec le serveur
+Pour le moment, nous avons tout effectué en local. Il est temps de voir comment interagir avec d'autre personnes.
+
+Pour télécharger les nouveauté depuis le serveur, On utilise la commande pull :
+```bash
+git pull
+```
+
+Si vous avez effectué des changements, ils seront automatiquement fusionnés avec la nouvelle version. Si la même
+zone de code a été modifiée par vous et une autre personne, Git vous prévient. Vous devez alors modifié manuellement
+les fichiers concernés (les lignes modifiées sont délimitées par « <<<<<<<<< »).
